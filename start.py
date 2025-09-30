@@ -6,6 +6,15 @@ import torch
 from funasr import AutoModel
 from datetime import datetime, timedelta
 import glob
+import soundfile as sf
+
+def audio_file_is_valid(file_path):
+    try:
+        # 能够打开并读取代表文件是有效音频
+        with sf.SoundFile(file_path) as f:
+            return f.frames > 0
+    except Exception:
+        return False
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
@@ -46,7 +55,7 @@ def check_and_release_memory():
         available_memory_mb = available_memory / 1024 / 1024
         print(f"Available GPU Memory: {available_memory_mb:.2f} MB")
         
-        if available_memory_mb < 500:
+        if available_memory_mb < 50:
             print("Low GPU memory detected. Clearing cache.")
             torch.cuda.empty_cache()
 
@@ -84,13 +93,19 @@ def api():
 
         try:
             print("Starting audio processing")
+
+            # Debug: Verify that the audio file is valid
+            if not audio_file_is_valid(file_path):
+                print(f"Uploaded file is empty or invalid audio")
+                return jsonify({"code": 1, "msg": "Uploaded file is empty or invalid audio"}), 400
+
             # Set a smaller batch size to reduce memory usage
             res = model.generate(
                 input=file_path,
                 return_raw_text=True,
                 is_final=True,
                 sentence_timestamp=True,
-                batch_size_s=50,
+                batch_size_s=100,
                 hotword=hotwords_str
             )
 
