@@ -8,6 +8,6 @@
 ### 3. 启动服务
   ```python start.py```
 > 接口使用示例
-> curl -X POST http://{server_ip}:9933/api \
+> ```curl -X POST http://{server_ip}:9933/api \
   -F "audio=@abc.wav" \
-  -H "Content-Type: multipart/form-data" 
+  -H "Content-Type: multipart/form-data"```
