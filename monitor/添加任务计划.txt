@@ -1,6 +1,10 @@
+# 先放一个小时长（5s左右即可）的monitor.wav在当前目录，用于检测服务是否正常
+
+# 创建后台任务计划
 schtasks /create /tn "Monitor_9933" ^
  /tr "D:\aigc\stt_api\monitor\check_status.bat" ^
  /sc minute /mo 60 ^
  /ru SYSTEM
 
+# 检查任务计划是否创建成功
 schtasks /query /tn "Monitor_9933" /v /fo list
