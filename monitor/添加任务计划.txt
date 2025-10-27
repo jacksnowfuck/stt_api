@@ -1,0 +1,6 @@
+schtasks /create /tn "Monitor_9933" ^
+ /tr "D:\aigc\stt_api\monitor\check_status.bat" ^
+ /sc minute /mo 60 ^
+ /ru SYSTEM
+
+schtasks /query /tn "Monitor_9933" /v /fo list
