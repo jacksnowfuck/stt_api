@@ -137,7 +137,7 @@ def api():
             # 1. 预处理 (CPU完成，不占显存)
             # 强制转 16k，能大幅降低显存消耗！这对 6G 显存至关重要
             process_file_path = os.path.join(date_folder, f"proc_{filename}.wav")
-            cmd = f'ffmpeg -y -i "{file_path}" -ar 16000 -ac 1 -c:a pcm_s16le "{process_file_path}" -loglevel error'
+            cmd = f'ffmpeg -y -i "{file_path}" -ar 16000 -ac 1 -af "apad=pad_dur=5" -c:a pcm_s16le "{process_file_path}" -loglevel error'
             if os.system(cmd) != 0: raise Exception("FFmpeg failed")
             abs_path = os.path.abspath(process_file_path)
 
@@ -174,7 +174,7 @@ def api():
                         return_raw_text=True,
                         is_final=True,
                         sentence_timestamp=True,
-                        batch_size_s=50,
+                        batch_size_s=60,
                         hotword=load_hotwords(HOTWORDS_FILE),
                         device="cuda"
                     )
